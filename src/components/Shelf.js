@@ -12,11 +12,11 @@ class Shelf extends Component {
 
     render() {
         return (
-            <div>
-                <div className="list-books-title">
+            <div className="bookshelf">
+                <div className="bookshelf-title">
                     <h1>{this.props.name}</h1>
                 </div>
-                <BooksList books={this.props.books} onBookShelfChanged={this.props.onBookShelfChanged}/>
+                <BooksList className="bookshelf-books" books={this.props.books} onBookShelfChanged={this.props.onBookShelfChanged}/>
             </div>
         );
     }
