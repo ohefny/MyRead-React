@@ -5,10 +5,17 @@ import {search} from "../BooksAPI";
 import {QUERY_REGEX} from "../consts";
 
 class SearchBooks extends Component {
+    static propTypes = {
+        onBookShelfChanged:PropTypes.func.isRequired
+    };
     state = {
         rawQuery: "",
         queriedBooks: []
     };
+    constructor(props) {
+        super(props);
+        this.onChangeBookshelf = this.onChangeBookshelf.bind(this);
+    }
     updateQuery = (query) => {
         if(this.isEmptyQuery(query)){
             console.log("clear query");
@@ -43,11 +50,6 @@ class SearchBooks extends Component {
     clearQuery = () => {
         this.setState({rawQuery: ''})
     };
-
-    onChangeShelf = (book, shelf) => {
-
-    };
-
     render() {
         //todo apply navigation of close-search instead of setState
         return (
@@ -63,7 +65,8 @@ class SearchBooks extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <BooksList books={this.state.queriedBooks} onBookShelfChanged={this.onChangeShelf}/>
+                    <BooksList books={this.state.queriedBooks}
+                               onBookShelfChanged={this.props.onBookShelfChanged}/>
                 </div>
             </div>
         )

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {BOOK_SHELF_OPTION} from "../consts";
+import {update} from "../BooksAPI";
 
 class BooksList extends Component {
     static propTypes = {
@@ -9,19 +10,28 @@ class BooksList extends Component {
     };
     state = {};
 
-    changeBookshelf(book,shelfID) {
-        console.log(book)
+    constructor(props) {
+        super(props);
+        this.changeBookshelf= this.changeBookshelf.bind(this)
     }
-
+    changeBookshelf = (book, shelf) => {
+        console.log(`onChangeShelf: ${book} ${shelf} `);
+        update(book,shelf)
+            .then(()=>{console.log("updated")},(e)=>{console.error(e)})
+            .then(this.props.onBookShelfChanged(book,shelf))
+            .catch((e)=>{console.log(e)})
+    };
     render() {
         return (
-            <ol className="books-grid">
-                {this.props.books.map(book =>
-                    <li key={book.id}>
-                        <BookItem book={book} changeBookshelf={this.changeBookshelf}/>
-                    </li>
-                )}
-            </ol>
+            <div className="bookshelf-books">
+                <ol className="books-grid">
+                    {this.props.books.map(book =>
+                        <li key={book.id}>
+                            <BookItem book={book} changeBookshelf={this.changeBookshelf}/>
+                        </li>
+                    )}
+                </ol>
+            </div>
         )
     }
 }
@@ -40,7 +50,8 @@ function BookItem(props) {
 
 function BookshelfChanger(props) {
     return (<div className="book-shelf-changer">
-        <select defaultValue={props.book.currentShelf} onChange={(event) => props.onBookShelfChanged(props.book,event.target.value)}>
+        <select defaultValue={props.book.currentShelf}
+                onChange={(event) => props.onBookShelfChanged(props.book, event.target.value)}>
             <option value="move" disabled>Move to...</option>
             <option value={BOOK_SHELF_OPTION.CURRENTLY_READING}>Currently Reading</option>
             <option value={BOOK_SHELF_OPTION.WANT_TO_READ}>Want to Read</option>

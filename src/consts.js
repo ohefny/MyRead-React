@@ -9,3 +9,4 @@ export const MY_SHELVES = [
     {title: "Want To Read", id: BOOK_SHELF_OPTION.WANT_TO_READ},
     {title: "Read", id: BOOK_SHELF_OPTION.READ}
 ];
+export const QUERY_REGEX = /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/
