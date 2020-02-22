@@ -1,18 +1,14 @@
 import React, {Component} from "react";
-import {getAll} from "../BooksAPI"
 import PropTypes from "prop-types";
 import Shelf from "./Shelf";
-import SearchBooks from "./SearchBooks";
-import {BOOK_SHELF_OPTION, MY_SHELVES} from "../consts";
+import {MY_SHELVES} from "../consts";
+import { Link } from 'react-router-dom'
 
 class MyReads extends Component {
     static propTypes = {
         myBooks:PropTypes.array.isRequired,
         onBookshelfChanged:PropTypes.func.isRequired
     };
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <div className="list-books">
@@ -49,7 +45,7 @@ function MyShelves(props) {
 function SearchButton(props) {
     return (
         <div className="open-search">
-            <button onClick={() => this.setState({showSearchPage: true})}>Add a book</button>
+            <Link className="open-search" to='/search'>Add a book</Link>
         </div>
     )
 }
