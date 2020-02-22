@@ -6,28 +6,18 @@ import SearchBooks from "./SearchBooks";
 import {BOOK_SHELF_OPTION, MY_SHELVES} from "../consts";
 
 class MyReads extends Component {
-    state = {
-        myBooks: []
+    static propTypes = {
+        myBooks:PropTypes.object.isRequired,
+        onBookshelfChanged:PropTypes.func.isRequired
     };
-    componentDidMount() {
-        this.fetchBooks()
-    }
-    fetchBooks() {
-        getAll().then((books) => {
-            console.log(books)
-            this.updateBooksState(books)
-        })
-    }
-    updateBooksState(books) {
-        this.setState({
-            myBooks: books
-        })
+    constructor(props) {
+        super(props);
     }
     render() {
         return (
             <div className="list-books">
                 <MyReadsTitle/>
-                <MyShelves books={this.state.myBooks} shelvesMetaData={MY_SHELVES}/>
+                <MyShelves books={this.props.myBooks} shelvesMetaData={MY_SHELVES} onBookshelfChanged={this.props.onBookshelfChanged}/>
                 <SearchButton/>
             </div>
         )
@@ -48,9 +38,8 @@ function MyShelves(props) {
             {props.shelvesMetaData.map(shelf =>
                 <li key={shelf.id}>
                     <Shelf metadata={shelf}
-                           books={props.books.filter(book => book.shelf === shelf.id)}
-                           onBookShelfChanged={() => {
-                           }}/>
+                           shelfBooks={props.books.filter(book => book.shelf === shelf.id)}
+                           onBookShelfChanged={props.onBookshelfChanged}/>
                 </li>
             )}
         </ol>
