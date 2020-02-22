@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import BooksList from "./BooksList";
 import {search} from "../BooksAPI";
+import {QUERY_REGEX} from "../consts";
 
 class SearchBooks extends Component {
     state = {
@@ -9,20 +10,21 @@ class SearchBooks extends Component {
         queriedBooks: []
     };
     updateQuery = (query) => {
-        const enhancedQuery = query.trim();
-        console.log(enhancedQuery);
-        console.log(enhancedQuery !== '');
-        if(query===''||query.trim()===''){
+        if(this.isEmptyQuery(query)){
             console.log("clear query");
             this.clearQuery();
             this.updateQueriedBooksState([]);
         }
-        else if (/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/.test(query + 'a')) {
+        else if (this.isValidQuery(query)) {
             console.log("sets query");
             this.fetchSearchResults(query);
             this.setState({rawQuery: query})
         }
     };
+
+    isEmptyQuery=(query)=> (query===''||query.trim()==='');
+    isValidQuery=(query)=> QUERY_REGEX.test(query + 'a');
+
     fetchSearchResults = (query) => {
         search(query).then((booksResponse) => {
             console.log(booksResponse);
