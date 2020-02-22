@@ -1,6 +1,11 @@
 export const BOOK_SHELF_OPTION = {
-    NONE: 0,
-    READ: 1,
-    CURRENTLY_READING: 2,
-    WANT_TO_READ: 3
+    NONE: "none",
+    READ: "read",
+    CURRENTLY_READING: "currentlyReading",
+    WANT_TO_READ: "wantToRead"
 };
+export const MY_SHELVES = [
+    {title: "Currently Reading", id: BOOK_SHELF_OPTION.CURRENTLY_READING},
+    {title: "Want To Read", id: BOOK_SHELF_OPTION.WANT_TO_READ},
+    {title: "Read", id: BOOK_SHELF_OPTION.READ}
+];

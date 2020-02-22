@@ -2,77 +2,67 @@ import React, {Component} from "react";
 import {getAll} from "../BooksAPI"
 import PropTypes from "prop-types";
 import Shelf from "./Shelf";
+import SearchBooks from "./SearchBooks";
+import {BOOK_SHELF_OPTION, MY_SHELVES} from "../consts";
 
 class MyReads extends Component {
     state = {
-        myBooks: [
-            {
-                title: "Shelf 1 Book",
-                author: "Author 1 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 1
-            },
-            {
-                title: "Shelf 1A Book",
-                author: "Author 1 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 1
-            },
-            {
-                title: "Shelf 2 Book",
-                author: "Author 2 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 2
-            },
-            {
-                title: "Shelf 2A Book",
-                author: "Author 2 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 2
-            },
-            {
-                title: "Shelf 3 Book",
-                author: "Author 3 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 3
-            },
-            {
-                title: "Shelf 3A Book",
-                author: "Author 3 ",
-                cover: "https://hackernoon.com/hn-images/1*3sCt4oZw74j4RlTH39NskQ.jpeg",
-                currentShelf: 3
-            },
-        ]
+        myBooks: []
     };
-
     componentDidMount() {
         this.fetchBooks()
     }
-
     fetchBooks() {
-        //getAll().then(::this.updateBooksState())
+        getAll().then((books) => {
+            console.log(books)
+            this.updateBooksState(books)
+        })
     }
-
     updateBooksState(books) {
         this.setState({
             myBooks: books
         })
     }
-
     render() {
         return (
-            <div>
-                <Shelf className="bookshelf" name={"Currently Reading"}
-                       books={this.state.myBooks.filter(books => books.currentShelf === 1)} onBookShelfChanged={() => {
-                }}/>
-                <Shelf className="bookshelf" name={"Want To Read"}
-                       books={this.state.myBooks.filter(books => books.currentShelf === 2)} onBookShelfChanged={() => {
-                }}/>
-                <Shelf className="bookshelf" name={"Read"}
-                       books={this.state.myBooks.filter(books => books.currentShelf === 3)} onBookShelfChanged={() => {
-                }}/>
+            <div className="list-books">
+                <MyReadsTitle/>
+                <MyShelves books={this.state.myBooks} shelvesMetaData={MY_SHELVES}/>
+                <SearchButton/>
             </div>
         )
-    }
+    };
+
 }
+
+function MyReadsTitle(props) {
+    return (
+        <div className="list-books-title">
+            <h1>MyReads</h1>
+        </div>)
+}
+
+function MyShelves(props) {
+    return (
+        <ol className="list-books-content">
+            {props.shelvesMetaData.map(shelf =>
+                <li key={shelf.id}>
+                    <Shelf metadata={shelf}
+                           books={props.books.filter(book => book.shelf === shelf.id)}
+                           onBookShelfChanged={() => {
+                           }}/>
+                </li>
+            )}
+        </ol>
+    )
+}
+
+function SearchButton(props) {
+    return (
+        <div className="open-search">
+            <button onClick={() => this.setState({showSearchPage: true})}>Add a book</button>
+        </div>
+    )
+}
+
 export default MyReads
