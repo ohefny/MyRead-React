@@ -13,14 +13,16 @@ class BookshelfChanger extends Component {
         this.changeBookshelf = this.changeBookshelf.bind(this)
     }
     state = {
-        currentShelf:this.props.book.shelf
+        currentShelf:this.props.book.shelf? this.props.book.shelf : BOOK_SHELF_OPTION.NONE
     };
     changeBookshelf = (shelf) => {
         const {book} = this.props;
         console.log(`onChangeShelf: ${book} ${shelf} `);
+        this.setState({currentShelf:shelf});
         update(book,shelf)
-            .then(()=>this.props.onBookShelfChanged(book,shelf),(e)=>console.error(e))
-            .catch((e)=>{console.log(e)})
+            .then(()=>{},(e)=>console.error(e))
+            .catch((e)=>{console.log(e)});
+        this.props.onBookShelfChanged(book,shelf)
     };
     render() {
         return (<div className="book-shelf-changer">
