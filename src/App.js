@@ -4,6 +4,8 @@ import './App.css'
 import SearchBooks from "./components/SearchBooks";
 import MyReads from "./components/MyReads";
 import {getAll} from "./BooksAPI";
+import {Route} from 'react-router-dom'
+import {BOOK_SHELF_OPTION} from "./consts";
 
 class BooksApp extends React.Component {
     state = {
@@ -31,18 +33,28 @@ class BooksApp extends React.Component {
         })
     };
     onBookShelfChanged = (book, shelf) => {
-        this.fetchBooks();
+        const newBooks=this.removeBook(book);
+        book.shelf=shelf;
+        if(shelf!==BOOK_SHELF_OPTION.NONE)
+            newBooks.push(book)
+        this.updateBooksState(newBooks)
+    };
+    removeBook=(book)=> {
+        return this.state.myBooks.filter((myBook) => (myBook.id !== book.id));
     };
 
     render() {
         return (
-            <div className="app">
-                {this.state.showSearchPage ?
-                    <SearchBooks onBookShelfChanged={this.onBookShelfChanged}/>
-                    : <MyReads myBooks={this.state.myBooks} onBookshelfChanged={this.onBookShelfChanged}/>
-                }
+            <div>
+                <Route exact path='/' render={() => (
+                    <MyReads myBooks={this.state.myBooks} onBookshelfChanged={this.onBookShelfChanged}/>
+                )}/>
+                <Route path='/search' render={({ history }) => (
+                    <SearchBooks myBooks={this.state.myBooks} onBookShelfChanged={this.onBookShelfChanged}/>
+                )}/>
             </div>
         )
+
     }
 }
 
