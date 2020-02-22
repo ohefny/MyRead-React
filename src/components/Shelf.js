@@ -4,7 +4,7 @@ import BooksList from "./BooksList";
 
 class Shelf extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired,
+        shelfBooks: PropTypes.array.isRequired,
         metadata: PropTypes.shape({
             id: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired
@@ -19,7 +19,7 @@ class Shelf extends Component {
                 <div className="bookshelf-title">
                     <h1>{this.props.metadata.title}</h1>
                 </div>
-                <BooksList className="bookshelf-books" books={this.props.books}
+                <BooksList books={this.props.shelfBooks}
                            onBookShelfChanged={this.props.onBookShelfChanged}/>
             </div>
         );
