@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
-import {BOOK_SHELF_OPTION} from "../consts";
-import {update} from "../BooksAPI";
 import BookshelfChanger from "./BookshelfChanger";
 
 class BooksList extends Component {
