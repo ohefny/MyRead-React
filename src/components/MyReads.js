@@ -7,7 +7,7 @@ import {BOOK_SHELF_OPTION, MY_SHELVES} from "../consts";
 
 class MyReads extends Component {
     static propTypes = {
-        myBooks:PropTypes.object.isRequired,
+        myBooks:PropTypes.array.isRequired,
         onBookshelfChanged:PropTypes.func.isRequired
     };
     constructor(props) {
