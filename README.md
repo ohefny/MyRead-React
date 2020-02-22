@@ -8,7 +8,7 @@ Web app that enable users to :-
 
 ## TL;DR
 
-To get the app runing right away:
+To get the app up and running right away:
 
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
