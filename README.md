@@ -6,7 +6,7 @@ Web app that enable users to :-
  * Remove books from the shelves
  * Move books between shelves
 
-## TL;DR
+## How to run
 
 To get the app up and running right away:
 
