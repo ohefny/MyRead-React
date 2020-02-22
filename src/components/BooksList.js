@@ -9,15 +9,15 @@ class BooksList extends Component {
     };
     state = {};
 
-    changeBookshelf(id) {
-        console.log(id)
+    changeBookshelf(book,shelfID) {
+        console.log(book)
     }
 
     render() {
         return (
             <ol className="books-grid">
                 {this.props.books.map(book =>
-                    <li>
+                    <li key={book.id}>
                         <BookItem book={book} changeBookshelf={this.changeBookshelf}/>
                     </li>
                 )}
@@ -30,8 +30,8 @@ function BookItem(props) {
     const {book, changeBookshelf} = props;
     return <div className="book">
         <div className="book-top">
-            <BookCover cover={book.cover}/>
-            <BookshelfChanger onBookShelfChanged={changeBookshelf} currentShelf={book.currentShelf}/>
+            <BookCover cover={book.imageLinks.thumbnail}/>
+            <BookshelfChanger onBookShelfChanged={changeBookshelf} book={book}/>
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.author}</div>
@@ -40,7 +40,7 @@ function BookItem(props) {
 
 function BookshelfChanger(props) {
     return (<div className="book-shelf-changer">
-        <select defaultValue={props.currentShelf} onChange={(event) => props.onBookShelfChanged(event.target.value)}>
+        <select defaultValue={props.book.currentShelf} onChange={(event) => props.onBookShelfChanged(props.book,event.target.value)}>
             <option value="move" disabled>Move to...</option>
             <option value={BOOK_SHELF_OPTION.CURRENTLY_READING}>Currently Reading</option>
             <option value={BOOK_SHELF_OPTION.WANT_TO_READ}>Want to Read</option>
