@@ -3,34 +3,32 @@ import PropTypes from 'prop-types'
 import BooksList from "./BooksList";
 import {search} from "../BooksAPI";
 import {QUERY_REGEX} from "../consts";
+import { Link } from 'react-router-dom'
 
 class SearchBooks extends Component {
     static propTypes = {
-        onBookShelfChanged:PropTypes.func.isRequired
+        myBooks: PropTypes.array.isRequired,
+        onBookShelfChanged: PropTypes.func.isRequired
     };
     state = {
         rawQuery: "",
         queriedBooks: []
     };
-    constructor(props) {
-        super(props);
-        this.onChangeBookshelf = this.onChangeBookshelf.bind(this);
-    }
+
     updateQuery = (query) => {
-        if(this.isEmptyQuery(query)){
+        if (this.isEmptyQuery(query)) {
             console.log("clear query");
             this.clearQuery();
             this.updateQueriedBooksState([]);
-        }
-        else if (this.isValidQuery(query)) {
+        } else if (this.isValidQuery(query)) {
             console.log("sets query");
             this.fetchSearchResults(query);
             this.setState({rawQuery: query})
         }
     };
 
-    isEmptyQuery=(query)=> (query===''||query.trim()==='');
-    isValidQuery=(query)=> QUERY_REGEX.test(query + 'a');
+    isEmptyQuery = (query) => (query === '' || query.trim() === '');
+    isValidQuery = (query) => QUERY_REGEX.test(query + 'a');
 
     fetchSearchResults = (query) => {
         search(query).then((booksResponse) => {
@@ -42,21 +40,29 @@ class SearchBooks extends Component {
         }, (e) => console.log(e))
             .catch((e) => console.log(e))
     };
+    updateShelf = (books) => {
+        this.props.myBooks.forEach((book) => {
+            const bookIndex = books.findIndex((searchBook) => searchBook.id === book.id)
+            if (bookIndex > -1)
+                books[bookIndex].shelf = book.shelf
+
+        });
+        return books
+    };
     updateQueriedBooksState = (books) => {
         this.setState({
-            queriedBooks: books
+            queriedBooks: this.updateShelf(books)
         })
     };
     clearQuery = () => {
         this.setState({rawQuery: ''})
     };
+
     render() {
-        //todo apply navigation of close-search instead of setState
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <button className="close-search" onClick={() => this.setState({showSearchPage: false})}>Close
-                    </button>
+                    <Link className="close-search" to='/'>Close</Link>
                     <div className="search-books-input-wrapper">
                         <input type="text"
                                value={this.state.rawQuery}
